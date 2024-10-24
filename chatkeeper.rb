@@ -52,11 +52,10 @@ class Chatkeeper < Formula
     end
   
     def caveats
-      <<~EOS
-        ChatKeeper has been installed!
-        #{rosetta_message if Hardware::CPU.arm?}
-        For more information, visit https://martiansoftware.com/chatkeeper
-      EOS
+      msg = ["ChatKeeper has been installed!"]
+      msg << rosetta_message if Hardware::CPU.arm?
+      msg << "For more information, visit https://martiansoftware.com/chatkeeper"    
+      msg.join("\n")
     end
   
     test do
