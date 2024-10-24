@@ -12,6 +12,7 @@ class Chatkeeper < Formula
   
     def rosetta_message
       base_message = <<-EOS
+
         **********************************************************************
         *  On Apple Silicon Macs, ChatKeeper *should* run under Rosetta 2.   *
         *                                                                    *
@@ -37,6 +38,7 @@ class Chatkeeper < Formula
         *  your experience with ChatKeeper under Rosetta to                  *
         *  chatkeeper@martiansoftware.com.                                   *
         **********************************************************************
+
       EOS
   
       base_message + install_instructions + feedback_message
@@ -52,9 +54,7 @@ class Chatkeeper < Formula
     def caveats
       <<~EOS
         ChatKeeper has been installed!
-  
         #{rosetta_message if Hardware::CPU.arm?}
-  
         For more information, visit https://martiansoftware.com/chatkeeper
       EOS
     end
