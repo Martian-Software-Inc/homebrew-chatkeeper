@@ -6,7 +6,11 @@ class Chatkeeper < Formula
     url "https://files.martiansoftware.com/chatkeeper/1.0.1-beta-1/chatkeeper-1.0.1-beta-1-macos-x86_64.tar.gz"
     sha256 "ce061a9d8ce1a74eb7664bf59bae6d8f003d139354cfd72bc8e9f7ade5537880"
   
-    def rosetta_message(installed = false)
+    def rosetta_installed?
+      @rosetta_installed ||= system("/usr/bin/arch", "-x86_64", "/usr/bin/true")
+    end
+  
+    def rosetta_message
       base_message = <<-EOS
         **********************************************************************
         *  On Apple Silicon Macs, ChatKeeper *should* run under Rosetta 2.   *
@@ -15,7 +19,7 @@ class Chatkeeper < Formula
         *                                                                    *
       EOS
   
-      install_instructions = if installed
+      install_instructions = if rosetta_installed?
         <<-EOS
         *  It looks like Rosetta 2 is already installed.                     *
         *                                                                    *
@@ -40,8 +44,7 @@ class Chatkeeper < Formula
   
     def install
       if Hardware::CPU.arm?
-        rosetta_installed = system("/usr/bin/arch", "-x86_64", "/usr/bin/true")
-        odie rosetta_message(false) unless rosetta_installed
+        odie rosetta_message unless rosetta_installed?
       end
       bin.install "chatkeeper"
     end
@@ -50,10 +53,9 @@ class Chatkeeper < Formula
       <<~EOS
         ChatKeeper has been installed!
   
-        #{rosetta_message(Hardware::CPU.arm? && system("/usr/bin/arch", "-x86_64", "/usr/bin/true"))}
+        #{rosetta_message if Hardware::CPU.arm?}
   
-        For more information, visit:
-        https://martiansoftware.com/chatkeeper
+        For more information, visit https://martiansoftware.com/chatkeeper
       EOS
     end
   
