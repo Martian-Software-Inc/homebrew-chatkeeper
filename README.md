@@ -16,7 +16,7 @@ This step is only necessary on M1/M2/M3 hardware.
 - Via Terminal: `softwareupdate --install-rosetta --agree-to-license`
 
 ## Installing ChatKeeper
-- Via HomeBrew: `brew install Martian-Software-Inc/chatkeeper/chatkeeper`
+- Via HomeBrew: `brew install martian-software-inc/chatkeeper/chatkeeper`
 
 ## Using ChatKeeper
 - [ChatKeeper Quick Start Guide](https://martiansoftware.com/chatkeeper/quickstart)
