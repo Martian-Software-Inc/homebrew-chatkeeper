@@ -46,7 +46,7 @@ class Chatkeeper < Formula
   
     def install
       if Hardware::CPU.arm?
-        odie rosetta_message unless rosetta_installed?
+        odie "#{rosetta_message}\n\nChatKeeper was not installed." unless rosetta_installed?
       end
       bin.install "chatkeeper"
     end
