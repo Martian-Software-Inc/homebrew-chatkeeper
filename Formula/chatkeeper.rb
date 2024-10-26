@@ -1,66 +1,63 @@
 class Chatkeeper < Formula
-    desc "ChatKeeper command-line tool"
-    homepage "https://martiansoftware.com/chatkeeper"
-    version "1.0.1-beta-1"
-  
-    url "https://files.martiansoftware.com/chatkeeper/1.0.1-beta-1/chatkeeper-1.0.1-beta-1-macos-x86_64.tar.gz"
-    sha256 "ce061a9d8ce1a74eb7664bf59bae6d8f003d139354cfd72bc8e9f7ade5537880"
-  
-    def rosetta_installed?
-      @rosetta_installed ||= system("/usr/bin/arch", "-x86_64", "/usr/bin/true")
-    end
-  
-    def rosetta_message
-      base_message = <<-EOS
+  desc "ChatKeeper command-line tool"
+  homepage "https://martiansoftware.com/chatkeeper"
+  version "1.0.1-beta-1"
 
-        **********************************************************************
-        *  On Apple Silicon Macs, ChatKeeper *should* run under Rosetta 2.   *
-        *                                                                    *
-        *  In this beta version, running under Rosetta has not been tested.  *
-        *                                                                    *
-      EOS
-  
-      install_instructions = if rosetta_installed?
-        <<-EOS
-        *  It looks like Rosetta 2 is already installed.                     *
-        *                                                                    *
+  url "https://files.martiansoftware.com/chatkeeper/1.0.1-beta-1/chatkeeper-1.0.1-beta-1-macos-x86_64.tar.gz"
+  sha256 "ce061a9d8ce1a74eb7664bf59bae6d8f003d139354cfd72bc8e9f7ade5537880"
+
+  # Architecture-specific installation handling
+  on_arm do
+    def self.rosetta_check
+      success = system("/usr/bin/arch", "-x86_64", "/usr/bin/true", out: :error, err: :error)
+      return :available if success
+      return :unavailable
+    end
+
+    def install
+      rosetta_status = self.class.rosetta_check
+      
+      case rosetta_status
+      when :available
+        bin.install "chatkeeper"
+        opoo <<~EOS
+          Installing x86_64 binary on ARM processor.
+          This will run under Rosetta 2 emulation.
         EOS
       else
-        <<-EOS
-        *  To install Rosetta 2, run:                                        *
-        *    softwareupdate --install-rosetta --agree-to-license             *
-        *                                                                    *
+        odie <<~EOS
+          ChatKeeper requires Rosetta 2 to run on Apple Silicon Macs.
+
+          Please install Rosetta 2 by running the following in Terminal:
+            softwareupdate --install-rosetta --agree-to-license
+
+          After installing Rosetta 2, please try installing ChatKeeper again.
         EOS
       end
-  
-      feedback_message = <<-EOS
-        *  Please send any feedback, either positive or negative, about      *
-        *  your experience with ChatKeeper under Rosetta to                  *
-        *  chatkeeper@martiansoftware.com.                                   *
-        **********************************************************************
+    end
 
-      EOS
-  
-      base_message + install_instructions + feedback_message
-    end
-  
-    def install
-      if Hardware::CPU.arm?
-        odie "#{rosetta_message}\n\nChatKeeper was not installed." unless rosetta_installed?
-      end
-      bin.install "chatkeeper"
-    end
-  
     def caveats
-      msg = ["ChatKeeper has been installed!"]
-      msg << rosetta_message if Hardware::CPU.arm?
-      msg << "For more information, visit https://martiansoftware.com/chatkeeper"    
-      msg.join("\n")
-    end
-  
-    test do
-      assert_predicate bin/"chatkeeper", :executable?
-      output = shell_output("#{bin}/chatkeeper --version")
-      assert_match "ChatKeeper version 1.0.1-beta-1", output
+      <<~EOS
+        ChatKeeper has been installed!
+        
+        This x86_64 binary is running under Rosetta 2 emulation on your Apple Silicon Mac.
+        Please report any issues to chatkeeper@martiansoftware.com
+        
+        For more information, visit https://martiansoftware.com/chatkeeper
+      EOS
     end
   end
+
+  # Default installation for Intel macs
+  on_intel do
+    def install
+      bin.install "chatkeeper"
+    end
+  end
+
+  test do
+    assert_predicate bin/"chatkeeper", :executable?
+    output = shell_output("#{bin}/chatkeeper --version")
+    assert_match "ChatKeeper version 1.0.1-beta-1", output
+  end
+end
