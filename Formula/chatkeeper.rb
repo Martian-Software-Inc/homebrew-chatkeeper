@@ -9,7 +9,7 @@ class Chatkeeper < Formula
   # Architecture-specific installation handling
   on_arm do
     def self.rosetta_check
-      success = system("/usr/bin/arch", "-x86_64", "/usr/bin/true", out: :error, err: :error)
+      success = system("/usr/bin/arch", "-x86_64", "/usr/bin/true")
       return :available if success
       return :unavailable
     end
