@@ -53,6 +53,15 @@ class Chatkeeper < Formula
     def install
       bin.install "chatkeeper"
     end
+
+    def caveats
+      <<~EOS
+        ChatKeeper has been installed!
+        
+        For more information, visit https://martiansoftware.com/chatkeeper
+      EOS
+    end
+
   end
 
   test do
