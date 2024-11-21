@@ -1,0 +1,101 @@
+#!/bin/bash
+
+# hi, homebrew users!  you don't need this. :)
+# it's just a tool I use to create/update the homebrew formulae in this repository.
+
+if [ $# != 5 ]; then
+    cat <<EOF >&2
+Usage: $0 <version> <x86_tgz_url> <x86_tgz_sha256> <arm_tgz_url> <arm_tgz_sha256>
+
+Example:
+  $0 2.3.4 https://example.com/x86.tar.gz abc123... https://example.com/arm.tar.gz def456...
+EOF
+    exit 1
+fi
+
+VERSION="${1}"
+URL_X86="${2}"
+SHA256_X86="${3}"
+URL_ARM="${4}"
+SHA256_ARM="${5}"
+
+formula() {
+    local CLASSNAME="${1}"
+    local CONFLICTS_WITH="${2}"
+
+    cat <<EOF
+class ${CLASSNAME} < Formula
+  desc "Convert ChatGPT conversation exports into local Markdown files"
+  homepage "https://martiansoftware.com/chatkeeper"
+  version "${VERSION}"
+
+  conflicts_with "${CONFLICTS_WITH}", because: "both install a 'chatkeeper' binary"
+
+  if Hardware::CPU.intel?
+    url "${URL_X86}"
+    sha256 "${SHA256_X86}"
+  elsif Hardware::CPU.arm?
+    url "${URL_ARM}"
+    sha256 "${SHA256_ARM}"
+  else
+    odie "Unsupported architecture"
+  end
+
+  def install
+    bin.install "chatkeeper"
+  end
+
+  def caveats
+    <<~EOS
+    ChatKeeper converts your ChatGPT conversation export files into local
+    Markdown files, making them much more useful.
+
+    To get started, type 'chatkeeper --help', or visit
+    https://martiansoftware.com/chatkeeper/quickstart
+
+    ...and please send any feedback, positive or negative, to 
+    chatkeeper@martiansoftware.com so I can keep improving it.
+
+    Thank you for using ChatKeeper!
+    EOS
+  end
+
+  test do
+    assert_predicate bin/"chatkeeper", :executable?
+    output = shell_output("#{bin}/chatkeeper --version")
+    assert_match "ChatKeeper version ${VERSION}", output
+  end
+end
+EOF
+}
+
+generate-formulas() {
+  # default values for stable releases
+  local APPNAME="chatkeeper"
+  local CONFLICTS_WITH="chatkeeper-rc"  
+  local LATEST_CLASSNAME="ChatKeeper"
+
+  # if the version is a release candidate, adjust variables accordingly
+  if [[ "${VERSION}" =~ .*-rc.* ]]; then
+    APPNAME="chatkeeper-rc"
+    CONFLICTS_WITH="chatkeeper"
+    LATEST_CLASSNAME="ChatKeeperRC"
+  fi
+
+  # generate class names and filenames
+  local VERSIONED_CLASSNAME="${LATEST_CLASSNAME}_AT_$( echo ${VERSION} | sed -e 's/[.-]/_/g' )"
+  local LATEST_FILENAME="${APPNAME}.rb"
+  local VERSIONED_FILENAME="${APPNAME}@${VERSION}.rb"
+
+  # finally, generate the formula files
+  formula "${LATEST_CLASSNAME}" "${CONFLICTS_WITH}" > "Formula/${LATEST_FILENAME}"
+  echo "Wrote Formula/${LATEST_FILENAME}"
+
+  formula "${VERSIONED_CLASSNAME}" "${CONFLICTS_WITH}" > "Formula/${VERSIONED_FILENAME}"
+  echo "Wrote Formula/${VERSIONED_FILENAME}"
+}
+
+(
+  cd "$(dirname "${0}")"
+  generate-formulas
+)
