@@ -9,8 +9,8 @@ class ChatkeeperRc < Formula
     url "https://files.martiansoftware.com/chatkeeper/1.1.0-rc.1/macos-x86_64/chatkeeper-1.1.0-rc.1-macos-x86_64.tar.gz"
     sha256 "1aab3f8e4750a31356cbbf5d0a2904256138f2a9aac78eda162bce9b617605e9"
   elsif Hardware::CPU.arm?
-    url "https://files.martiansoftware.com/FAKE"
-    sha256 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    url "https://files.martiansoftware.com/chatkeeper/1.1.0-rc.1/macos-arm64/chatkeeper-1.1.0-rc.1-macos-arm64.tar.gz"
+    sha256 "17a7dd959c8ebd791ba408e77bd5e0dac004761a479404f5adb595dbec249327"
   else
     odie "Unsupported architecture"
   end
