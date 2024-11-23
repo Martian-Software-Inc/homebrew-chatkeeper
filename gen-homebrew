@@ -79,7 +79,7 @@ generate-formulas() {
   if [[ "${VERSION}" =~ .*-rc.* ]]; then
     APPNAME="chatkeeper-rc"
     CONFLICTS_WITH="chatkeeper"
-    LATEST_CLASSNAME="ChatKeeperRC"
+    LATEST_CLASSNAME="ChatKeeperRc"
   fi
 
   # generate class names and filenames
