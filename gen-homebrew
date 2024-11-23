@@ -73,13 +73,13 @@ generate-formulas() {
   # default values for stable releases
   local APPNAME="chatkeeper"
   local CONFLICTS_WITH="chatkeeper-rc"  
-  local LATEST_CLASSNAME="ChatKeeper"
+  local LATEST_CLASSNAME="Chatkeeper"
 
   # if the version is a release candidate, adjust variables accordingly
   if [[ "${VERSION}" =~ .*-rc.* ]]; then
     APPNAME="chatkeeper-rc"
     CONFLICTS_WITH="chatkeeper"
-    LATEST_CLASSNAME="ChatKeeperRc"
+    LATEST_CLASSNAME="ChatkeeperRc"
   fi
 
   # generate class names and filenames
