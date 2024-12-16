@@ -83,7 +83,7 @@ generate-formulas() {
   fi
 
   # generate class names and filenames
-  local VERSIONED_CLASSNAME="${LATEST_CLASSNAME}_AT_$( echo ${VERSION} | sed -e 's/[.-]/_/g' )"
+  local VERSIONED_CLASSNAME="${LATEST_CLASSNAME}AT$( echo ${VERSION} | sed -e 's/[.-]//g' )"
   local LATEST_FILENAME="${APPNAME}.rb"
   local VERSIONED_FILENAME="${APPNAME}@${VERSION}.rb"
 
