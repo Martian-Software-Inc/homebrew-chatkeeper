@@ -10,7 +10,7 @@ class Chatkeeper_AT_1_1_0 < Formula
     sha256 "b8d701083a9b84188a877c0efeadb7b09f5d1f10e9045d1fa193407fe2da93ef"
   elsif Hardware::CPU.arm?
     url "https://files.martiansoftware.com/chatkeeper/1.1.0/macos-arm64/chatkeeper-1.1.0-macos-arm64.tar.gz"
-    sha256 "target/macos-arm64/chatkeeper-1.1.0-macos-arm64.tar.gz.sha256"
+    sha256 "13f682a695d23355c0e379bc5e6443e80f08a648c16ac3f35019154524faf740"
   else
     odie "Unsupported architecture"
   end
