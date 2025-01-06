@@ -1,4 +1,4 @@
-class Chatkeeper < Formula
+class ChatkeeperAT111 < Formula
   desc "Convert ChatGPT conversation exports into local Markdown files"
   homepage "https://martiansoftware.com/chatkeeper"
   version "1.1.1"
