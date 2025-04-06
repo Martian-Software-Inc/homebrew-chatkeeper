@@ -95,6 +95,34 @@ generate-formulas() {
   echo "Wrote Formula/${VERSIONED_FILENAME}"
 }
 
+
+# Verify x86 binary
+echo "Downloading and verifying x86 binary from ${URL_X86}..."
+if ! calculated_hash_x86=$(curl -fsSL "${URL_X86}" | sha256sum | awk '{print $1}'); then
+  echo "Error: Failed to download the x86 file from ${URL_X86}" >&2
+  exit 1
+fi
+
+if [ "${calculated_hash_x86}" != "${SHA256_X86}" ]; then
+  echo "Error: SHA256 mismatch for x86 binary. Expected ${SHA256_X86} but got ${calculated_hash_x86}" >&2
+  exit 1
+fi
+
+# Verify ARM binary
+echo "Downloading and verifying ARM binary from ${URL_ARM}..."
+if ! calculated_hash_arm=$(curl -fsSL "${URL_ARM}" | sha256sum | awk '{print $1}'); then
+  echo "Error: Failed to download the ARM file from ${URL_ARM}" >&2
+  exit 1
+fi
+
+if [ "${calculated_hash_arm}" != "${SHA256_ARM}" ]; then
+  echo "Error: SHA256 mismatch for ARM binary. Expected ${SHA256_ARM} but got ${calculated_hash_arm}" >&2
+  exit 1
+fi
+
+echo "Both binaries verified successfully."
+
+
 (
   cd "$(dirname "${0}")"
   generate-formulas
