@@ -1,7 +1,7 @@
 # homebrew-chatkeeper
 ![Static Badge](https://img.shields.io/badge/status-obsolete-yellow)
 
-**ChatKeeper no longer uses homebrew for installation.  Fully-supported native mac installers are now available at the [ChatKeeper download page](https://martiansoftware.com/chatkeeper/download).**
+**[ChatKeeper](https://martiansoftware.com/chatkeeper) no longer uses homebrew for installation.  Fully-supported native mac installers are now available at the [ChatKeeper download page](https://martiansoftware.com/chatkeeper/download).**
 
 ---
 
