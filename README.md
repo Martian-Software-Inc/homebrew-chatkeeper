@@ -3,6 +3,7 @@
 
 **ChatKeeper no longer uses homebrew for installation.  Fully-supported native mac installers are now available at the [ChatKeeper download page](https://martiansoftware.com/chatkeeper/download).
 **
+
 ---
 
 This repository provides a [Homebrew](https://brew.sh/) tap for [ChatKeeper](https://martiansoftware.com/chatkeeper)
